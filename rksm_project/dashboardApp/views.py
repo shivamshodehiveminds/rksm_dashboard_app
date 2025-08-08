@@ -9,7 +9,7 @@ def req(request):
         studentName=request.POST.get('studentName')
         marks=request.POST.get('marks')
         subject=request.POST.get('subject')
-        if name and email and message:
-            Contact.objects.create(name=name,email=email,message=message)
+        if studentName and marks and subject:
+            Student.objects.create(studentName=studentName,marks=marks,subject=subject)
             return render(request,'thankyou.html')
     return render(request, 'forms.html')
