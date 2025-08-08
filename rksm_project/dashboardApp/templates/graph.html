@@ -1,8 +1,93 @@
-{% extends 'base.html' %}
-{% block content %}
-<h2>User Score Bar Chart</h2>
-<div id="chart" style="width: 600px; height: 400px;"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Charts from API</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            padding: 20px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        .chart-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+        }
+        .chart-box {
+            width: 500px;
+            height: 400px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
 
-<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-<script src="{% static 'js/graph.js' %}"></script>
-{% endblock %}
+    <h2>Dynamic Pie & Line Charts with ECharts</h2>
+    <div class="chart-container">
+        <div id="pieChart" class="chart-box"></div>
+        <div id="lineChart" class="chart-box"></div>
+    </div>
+
+    <script>
+        // Initialize chart instances
+        const pieChart = echarts.init(document.getElementById('pieChart'));
+        const lineChart = echarts.init(document.getElementById('lineChart'));
+
+        // Fetch Pie Chart Data
+        fetch('/api/pie-data/')
+            .then(response => response.json())
+            .then(data => {
+                const pieOption = {
+                    title: { text: 'User Distribution', left: 'center' },
+                    tooltip: { trigger: 'item' },
+                    legend: { orient: 'vertical', left: 'left' },
+                    series: [{
+                        name: 'Users',
+                        type: 'pie',
+                        radius: '60%',
+                        data: data,
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }]
+                };
+                pieChart.setOption(pieOption);
+            });
+
+        // Fetch Line Chart Data
+        fetch('/api/line-data/')
+            .then(response => response.json())
+            .then(data => {
+                const lineOption = {
+                    title: { text: 'User Activity Over Time', left: 'center' },
+                    tooltip: { trigger: 'axis' },
+                    xAxis: { type: 'category', data: data.dates },
+                    yAxis: { type: 'value' },
+                    series: [{
+                        name: 'Activity',
+                        data: data.values,
+                        type: 'line',
+                        smooth: true
+                    }]
+                };
+                lineChart.setOption(lineOption);
+            });
+    </script>
+
+</body>
+</html>
