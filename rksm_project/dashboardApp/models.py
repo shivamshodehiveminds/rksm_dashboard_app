@@ -7,3 +7,7 @@ class Student(models.Model):
     subject = models.CharField(max_length = 100)
 
 # Create your models here.
+class Subject(models.Model):
+    student=models.ForeignKey(Student)
+    name=models.CharField(max_length=200)
+    mark=models.IntegerField()
