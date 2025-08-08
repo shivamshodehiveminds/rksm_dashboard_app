@@ -7,5 +7,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', views.req),
     path('tq/', views.req),
-    path('graph/', views.req),
+    path('graphs/', views.req),
+
 ]
