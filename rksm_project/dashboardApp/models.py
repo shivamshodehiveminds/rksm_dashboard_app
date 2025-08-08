@@ -1,13 +1,16 @@
-from django.db import models
+from . import models
 
-    
 class Student(models.Model):
-    studentName = models.CharField(max_length = 100)
-    marks = models.CharField(max_length = 100)
-    subject = models.CharField(max_length = 100)
+    studentName = models.CharField(max_length=100)
 
-# Create your models here.
+    def __str__(self):
+        return self.studentName
+
+
 class Subject(models.Model):
-    student=models.ForeignKey(Student)
-    name=models.CharField(max_length=200)
-    mark=models.IntegerField()
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)  # Required on_delete
+    name = models.CharField(max_length=200)
+    mark = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.name} - {self.mark}"
